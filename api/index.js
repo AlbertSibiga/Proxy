@@ -16,6 +16,10 @@ app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.get('*', (req, res, next) => {
+  res.json("SERVER is WORKING")
+  next()
+})
 app.get("/", (req, res) => res.json("SERVER is WORKING"));
 
 function sleep(ms) {
