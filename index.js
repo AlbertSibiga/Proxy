@@ -201,3 +201,5 @@ app.post("/check-ip", async (req, res) => {
 app.listen(port, () => {
   console.log(`IP Checker app listening at http://localhost:${port}`);
 });
+ 
+module.exports = app;
