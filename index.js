@@ -12,12 +12,11 @@ app.use(
   })
 );
 
-app.use("/", express.static('build'));
+app.use(express.static('build'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // app.get("/", (req, res) => res.json("SERVER is WORKING"));
-app.get("/", express.static(__dirname + 'build'));
 
 function sleep(ms) {
   return new Promise((resolve) => {
