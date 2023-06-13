@@ -157,11 +157,11 @@ const proxyCrack = async (proxy) => {
     return real_host + ":" + port;
   }
 };
-app.get('api/test', (req, res) => {
+app.get('/test', (req, res) => {
   res.send(req);
 });
 
-app.post("api/check-ip", async (req, res) => {
+app.post("/check-ip", async (req, res) => {
   const proxyArr = await Promise.all(req.body.ip.split("\n"));
   console.log("proxyArr:::", proxyArr)////
   const ipArr = await Promise.all(proxyArr.map((proxy) => ipCrack(proxy)));
