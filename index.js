@@ -12,7 +12,7 @@ app.use(
   })
 );
 
-app.use(express.static('build'));
+app.use("/", express.static('build'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -159,7 +159,6 @@ const proxyCrack = async (proxy) => {
   }
 };
 
-app.get("/", (req, res) => res.json("SERVER is WORKING"));
 
 app.post("/check-ip", async (req, res) => {
   const proxyArr = await Promise.all(req.body.ip.split("\n"));
