@@ -158,7 +158,7 @@ const proxyCrack = async (proxy) => {
   }
 };
 app.get('test', (req, res) => {
-  res.send('test');
+  res.send(req);
 });
 
 app.post("/check-ip", async (req, res) => {
