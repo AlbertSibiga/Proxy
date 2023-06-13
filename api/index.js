@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.get('*', (req, res, next) => {
-  res.json("SERVER is WORKING")
+  res.json(req.body)
   next()
 })
 app.get("/", (req, res) => res.json("SERVER is WORKING"));
@@ -165,7 +165,7 @@ app.get('/test', (req, res) => {
   res.send(req);
 });
 
-app.post("/check-ip", async (req, res) => {
+app.post("/check-ip", async (req, res, next) => {
   const proxyArr = await Promise.all(req.body.ip.split("\n"));
   console.log("proxyArr:::", proxyArr)////
   const ipArr = await Promise.all(proxyArr.map((proxy) => ipCrack(proxy)));
@@ -200,7 +200,7 @@ app.post("/check-ip", async (req, res) => {
     location: res_location,
     state: ProxyPort,
   });/**/
-  return;
+  next();
 });
 
 app.listen(port, () => {
