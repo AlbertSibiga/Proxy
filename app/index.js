@@ -12,12 +12,11 @@ app.use(
   })
 );
 
-// app.use(express.static('build'));
-app.get(express.static(__dirname + 'build'));
+app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// app.get("/", (req, res) => res.json("SERVER is WORKING"));
+app.get("/", (req, res) => res.json("SERVER is WORKING"));
 
 function sleep(ms) {
   return new Promise((resolve) => {
@@ -201,5 +200,5 @@ app.post("/check-ip", async (req, res) => {
 app.listen(port, () => {
   console.log(`IP Checker app listening at http://localhost:${port}`);
 });
-
+ 
 module.exports = app;
