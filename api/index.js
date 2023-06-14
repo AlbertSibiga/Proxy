@@ -16,10 +16,6 @@ app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.get('*', (req, res, next) => {
-  res.json(req.body)
-  next()
-})
 app.get("/", (req, res) => res.json("SERVER is WORKING"));
 
 function sleep(ms) {
@@ -32,7 +28,6 @@ function isValidIP(str) {
   const regex = new RegExp(`^${octet}\\.${octet}\\.${octet}\\.${octet}$`);
   return regex.test(str);
 }
-
 
 const IpRisk = async (ip) => {
   if (!isValidIP(ip)) {
@@ -65,7 +60,6 @@ const Location = async (ip) => {
     console.log('Location error');
     return await Location(ip);
   }
-
 };
 
 const IpState = async (proxy) => {
@@ -100,7 +94,7 @@ const ipCrack = async (proxy, cnt = 1) => {
   } 
   const type = "http";
   await sleep(2000);
-  /*const endpoint = `https://api.gologin.com/browser/check_proxy`;
+  const endpoint = `https://api.gologin.com/browser/check_proxy`;
   try {
     const response = await axios.post(
       endpoint,
@@ -132,9 +126,9 @@ const ipCrack = async (proxy, cnt = 1) => {
     }else{
       return host;
     }
-  }*/
+  }
 
-  const endpoint = 'https://www.courier.com/api/tools/domain-ip-lookup/?domain=' + host;
+  /*const endpoint = 'https://www.courier.com/api/tools/domain-ip-lookup/?domain=' + host;
   try {
     const response = await axios.get(endpoint);
     if (!response.data) {
@@ -147,8 +141,7 @@ const ipCrack = async (proxy, cnt = 1) => {
     }else{
       return host;
     }
-  }/**/
-
+  }*/
 };
 
 const proxyCrack = async (proxy) => {
@@ -161,10 +154,6 @@ const proxyCrack = async (proxy) => {
     return real_host + ":" + port;
   }
 };
-app.get('/test', (req, res) => {
-  res.send('req');
-});
-
 app.post("/check-ip", async (req, res, next) => {
   const proxyArr = await Promise.all(req.body.ip.split("\n"));
   console.log("proxyArr:::", proxyArr)////
@@ -199,8 +188,8 @@ app.post("/check-ip", async (req, res, next) => {
     risk: res_IpRisk,
     location: res_location,
     state: ProxyPort,
-  });/**/
-  next();
+  });
+  return;
 });
 
 app.listen(port, () => {
