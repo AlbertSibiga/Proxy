@@ -6,6 +6,7 @@ function App() {
   const [ipAddresses, setIpAddresses] = useState("");
   const [results, setResults] = useState([]);
   const [error, setError] = useState(null);
+  const [proxytype, setType] = useState('http');
   const [isLoading, setIsLoading] = useState(false); // Add state variable for loading
 
   const handleSubmit = async (event) => {
@@ -17,6 +18,7 @@ function App() {
     try {
       const response = await axios.post("/check-ip", {
         ip: ipAddresses,
+        proxytype: proxytype
       });
       const res = [];
       response.data.location.forEach((element, index) => {
@@ -28,15 +30,6 @@ function App() {
           ...state,
         })
       });
-      /*res = response.data.location.map((loc) => {
-        const risk = response.data.risk.find((r) => r);
-        const state = response.data.state.flat().find((s) => s);
-        return {
-          ...loc,
-          ...risk,
-          ...state,
-        };
-      });*/
       console.log(res);
       setResults(res);
       return;
@@ -68,6 +61,11 @@ function App() {
         </div>
         <div>
           <button type="submit" disabled={isLoading}>Check IPs</button> {/* Disable button when loading */}
+          <select value={proxytype} onChange={e => setType(e.target.value)}>
+            <option value={'http'}>HTTP</option>
+            <option value={'socks4'}>SOCKS4</option>
+            <option value={'socks5'}>SOCKS5</option>
+          </select>
         </div>
       </form>
       {isLoading && <p>Loading...</p>} {/* Show loading spinner when loading */}
@@ -94,7 +92,7 @@ function App() {
                   <img src={result.country_flag} width={14} />
                   {result.country}
                 </td>
-                <td width={80}>{result.protocol ? result.protocol : "http"}</td>
+                <td width={80}>{proxytype}</td>
                 <td width={100}>{result.risk}</td>
                 <td width={120}>{result.score}</td>
                 <td>{result.details}</td>

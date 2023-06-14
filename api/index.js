@@ -6,6 +6,7 @@ const cors = require("cors");
 const app = express();
 const port = 5000;
 
+
 app.use(
   cors({
     origin: "*",
@@ -32,7 +33,8 @@ function isValidIP(str) {
 const IpRisk = async (ip) => {
   if (!isValidIP(ip)) {
     return { 'ip': ip, 'risk': 'risk', 'score': 'score', 'details': 'Fail! Please Confirm Proxy Addr, Name and Pass.' };
-  }
+  }  
+  await sleep(2000);
   const endpoint = `https://scamalytics.com/ip/${ip}`;
   const response = await axios.get(endpoint);
   const html = response.data;
@@ -87,12 +89,12 @@ const IpState = async (proxy) => {
 const apiKey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDg5OGI2ZWJkODMxNWQ0OWQ4MmE3MDUiLCJ0eXBlIjoiZGV2Iiwiand0aWQiOiI2NDg5OGM1ZjY2YTkwYzFkMDNjZWY2YzcifQ.oDaAZQNh2DBUKrqfYVy_GOc-JwCR1dukvpCk5d-VXuY";
 
-const ipCrack = async (proxy, cnt = 1) => {
+const ipCrack = async (proxy, proxyType = 'http', cnt = 1) => {
   const [host, port, username, password] = proxy.split(":");
   if(isValidIP(host)){
     return host;
   } 
-  const type = "http";
+  const type = proxyType;
   await sleep(2000);
   const endpoint = `https://api.gologin.com/browser/check_proxy`;
   try {
@@ -122,7 +124,7 @@ const ipCrack = async (proxy, cnt = 1) => {
     }
   } catch (error) {
     if(!isValidIP(host) && port && username && password && cnt < 10){
-      return await ipCrack(proxy, cnt+1);
+      return await ipCrack(proxy, proxyType, cnt+1);
     }else{
       return host;
     }
@@ -156,31 +158,9 @@ const proxyCrack = async (proxy) => {
 };
 app.post("/check-ip", async (req, res, next) => {
   const proxyArr = await Promise.all(req.body.ip.split("\n"));
-  console.log("proxyArr:::", proxyArr)////
-  const ipArr = await Promise.all(proxyArr.map((proxy) => ipCrack(proxy)));
-  console.log("ipArr:::", ipArr)
-  /*const res_proxyArr = await Promise.all(
-    proxyArr.map((proxy) => {
-      let p1 = proxyCrack(proxy)
-      return p1 === proxy ? null : p1
-    })
-  );*/
-  //console.log("res_proxyArr:::", res_proxyArr)
+  const ipArr = await Promise.all(proxyArr.map((proxy) => ipCrack(proxy, req.body.proxytype)));
   const res_IpRisk = await Promise.all(ipArr.map((ip) => IpRisk(ip)));
   const res_location = await Promise.all(ipArr.map((ip) => Location(ip)));
-  // console.log(res_IpRisk);
-  // console.log(res_location);
-  /*const res_state = await Promise.all(
-    res_proxyArr.map((proxy) => {
-      //console.log(proxy);
-      if (proxy === null) {
-        return { flag: 'Fail' }
-      } else {
-        return IpState(proxy);
-      }
-      proxy === null ? {flag : 'Fail'} : IpState(proxy); 
-    })
-  );*/
   const ProxyPort = proxyArr.map((proxy) => {
     return { 'port': proxy.split(':')[1] };
   })
@@ -188,7 +168,7 @@ app.post("/check-ip", async (req, res, next) => {
     risk: res_IpRisk,
     location: res_location,
     state: ProxyPort,
-  });
+  });/**/
   return;
 });
 
