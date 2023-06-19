@@ -44,7 +44,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>IP Checker(AlbertSibiga)</h1>
+      <h1>IP Checker</h1>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="ip">Enter IP Addresses (one per line):</label>
