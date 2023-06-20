@@ -96,7 +96,7 @@ const ipCrack = async (proxy, proxyType = 'http', cnt = 1) => {
   } 
   const type = proxyType;
   await sleep(2000);
-  const endpoint = `https://api.gologin.com/browser/check_proxy`;
+  /*const endpoint = `https://api.gologin.com/browser/check_proxy`;
   try {
     const response = await axios.post(
       endpoint,
@@ -128,9 +128,9 @@ const ipCrack = async (proxy, proxyType = 'http', cnt = 1) => {
     }else{
       return host;
     }
-  }
+  }*/
 
-  /*const endpoint = 'https://www.courier.com/api/tools/domain-ip-lookup/?domain=' + host;
+  const endpoint = 'https://www.courier.com/api/tools/domain-ip-lookup/?domain=' + host;
   try {
     const response = await axios.get(endpoint);
     if (!response.data) {
@@ -143,7 +143,7 @@ const ipCrack = async (proxy, proxyType = 'http', cnt = 1) => {
     }else{
       return host;
     }
-  }*/
+  }
 };
 
 const proxyCrack = async (proxy) => {
